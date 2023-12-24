@@ -1,6 +1,5 @@
 // Create variables for DOM elements //
 const startRecordingBtn = document.querySelector('#start-recording');
-const stopRecordingBtn = document.querySelector('#stop-recording');
 const currentRecordingLength = document.querySelector('#current-recording-duration');
 const audioPlayerControls = document.querySelector('#audio-player-controls');
 
@@ -8,7 +7,7 @@ const audioPlayerControls = document.querySelector('#audio-player-controls');
 let mediaRecorder;
 let chunks = [];
 let startTime;
-
+let isRecording = false;
 
 // Start & Stop the Recording //
 startRecordingBtn.addEventListener('click', async (event) => { 
@@ -20,6 +19,12 @@ startRecordingBtn.addEventListener('click', async (event) => {
         ////////////////////////////
         // STARTING THE RECORDING //
         ////////////////////////////
+
+        // Set the value of the duration back to 0
+        currentRecordingLength.textContent = '0';
+
+        // Display the next button to get the demo question
+        document.querySelector('#next-demo-button').style.display = 'none';
         
         // Asking the user's permission to use mic
         let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -29,10 +34,12 @@ startRecordingBtn.addEventListener('click', async (event) => {
     
         // Starting the recording
         mediaRecorder.start();
+
+        // State that we are recording
+        isRecording = true;
     
         // Change the style of buttons
         startRecordingBtn.disabled = true;
-        stopRecordingBtn.disabled = false;
 
         // Start the timer when recording begins
         startTime = new Date();
@@ -45,53 +52,34 @@ startRecordingBtn.addEventListener('click', async (event) => {
             };
         };
     
-        //////////////////////////////////////
-        // STOPPING THE RECORDING - MANUALL //
-        //////////////////////////////////////
-        stopRecordingBtn.addEventListener('click', () => {
-            mediaRecorder.stop();
-            mediaRecorder.onstop = (event) => {
-    
-                // Change the style of buttons
-                startRecordingBtn.disabled = false;
-                stopRecordingBtn.disabled = true;
-
-                // Stop the timer when recording stops
-                clearInterval(timerInterval);
-    
-                // Create blob from the chucks of recording
-                const audioBlob = new Blob(chunks, { type: 'audio/wav' });
-                const audioURL = URL.createObjectURL(audioBlob);
-    
-                // Add the URL onto the audio player
-                audioPlayerControls.src = audioURL;
-                audioPlayerControls.controls = true;
-            };
-        });
-    
         ////////////////////////////////////
         // STOPPING THE RECORDING - TIMER //
-        ////////////////////////////////////
+        ////////////////////////////////////           
         setTimeout(() => {
             mediaRecorder.stop();
             mediaRecorder.onstop = (event) => {
-    
+
                 // Change the style of buttons
                 startRecordingBtn.disabled = false;
-                stopRecordingBtn.disabled = true;
 
                 // Stop the timer when recording stops
                 clearInterval(timerInterval);
-    
+
                 // Create blob from the chucks of recording
                 const audioBlob = new Blob(chunks, { type: 'audio/wav' });
                 const audioURL = URL.createObjectURL(audioBlob);
-    
+
                 // Add the URL onto the audio player
                 audioPlayerControls.src = audioURL;
                 audioPlayerControls.controls = true;
+
+                // Display the next button to get the demo question
+                document.querySelector('#next-demo-button').style.display = 'flex';
+            
+                // Stop recording
+                isRecording = false;
             };
-        }, 6000);
+        }, 3300);
 
     } catch (error) {
         console.log('Error recording the user: ', error);
@@ -101,14 +89,23 @@ startRecordingBtn.addEventListener('click', async (event) => {
 ////////////////////////////////////////////
 // Submitting the recording to the server //
 ////////////////////////////////////////////
-
 const submitButton = document.querySelector('#submit-button');
-submitButton.addEventListener('click', () => {
+submitButton.addEventListener('click', (e) => {
+
+     // Prevent the default form submission behavior
+    e.preventDefault();
 
     // Check if there are recorded audio chunks to send
     if (chunks.length === 0) {
         console.log('No recorded audio to submit.');
         alert('Please recording something to submit!');
+        return;
+    };
+
+    // Ensure that the demo input is selected
+    if (document.querySelector('.demo-input-container select').value === 'placeholder') {
+        console.log('you need to pick one');
+        alert('You need to pick a demographic input');
         return;
     };
 
@@ -128,7 +125,7 @@ submitButton.addEventListener('click', () => {
             // You can reset the recording or perform any other actions here
         } else {
             console.error('Failed to send audio data.');
-        }
+        };
     })
     .catch((error) => {
         console.error('Error sending audio data:', error);
@@ -138,7 +135,6 @@ submitButton.addEventListener('click', () => {
 //////////////////////////////////////////////
 // Callback Functions -- Callback Functions //
 //////////////////////////////////////////////
-
 function updateTimer() {
     const currentTime = new Date();
     const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);

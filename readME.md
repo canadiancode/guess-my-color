@@ -9,5 +9,6 @@ Main goals:
     - User can re-record, or click on "next"
     - On the next page, we will ask a single question in a dropdown menu
     - Once the user selects a value, we will display the "submit" button to the user
+    - Once they click on "submit", we will thank then for the submission
 
 3. Create a progress bar for the recording submission flow

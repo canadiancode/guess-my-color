@@ -15,7 +15,7 @@ body {
     gap: 10px;
     background: linear-gradient(145deg, rgba(7,0,134,1) 0%, rgba(0,92,111,1) 100%);
 }
-h1, h2, h3, input, p, span {
+h1, h2, h3, h4, input, p, span {
     color: white;
 }
 .button {
@@ -24,7 +24,9 @@ h1, h2, h3, input, p, span {
     border: 1px solid black;
     border-radius: 5px;
     font-weight: bold;
-    font-size: large; 
+    font-size: large;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 /* Title */
@@ -35,6 +37,24 @@ h1 {
     padding: 1rem;
 }
 
+/* Intro & instructions */
+.start-game-cta-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.instruction-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+}
+.instruction-container p {
+    max-width: 600px;
+}
+
 /* Recording style */
 .recording-container {
     padding: 1rem;
@@ -42,6 +62,12 @@ h1 {
     justify-content: center;
     flex-direction: column;
     gap: 15px;
+}
+.record-words {
+    margin: 0 auto;
+    text-align: center;
+    font-size: larger;
+    font-weight: xx-large;
 }
 .recording-container .btn-container {
     display: flex;
@@ -60,4 +86,31 @@ h1 {
 }
 #audio-player-controls {
     margin: 0 auto;
+}
+
+/* Demographic selection */
+.demo-input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.demo-input-container select {
+    padding: 1rem;
+    font-weight: bold;
+    
+}
+.demo-input-container option {
+    font-weight: bold;
+}
+.demo-input-container .submit-container {
+    margin: 0 auto;
+}
+
+/* Initially displaying only the intro page */
+.instruction-container, 
+.recording-container, 
+.demo-input-container,
+#next-demo-button {
+    display: none;
 }
