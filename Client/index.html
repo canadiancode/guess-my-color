@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess My Color</title>
+
+    <!-- Externally linked files -->
+    <link href="/Client/style.css" rel="stylesheet"/>
+    <script src="/Client/script.js" defer></script>
+
+    <!-- Fonts -->
+
+
+</head>
+<body>
+
+
+    <h1>Record & Save</h1>
+
+    <!-- Recording container -->
+    <div class="recording-container">
+        <div class="btn-container">
+            <button id="start-recording" class="button">Start Recording</button>
+            <button id="stop-recording" class="button" disabled>Stop Recording</button>
+        </div>
+        <p id="recording-duration">Recording duration: <span id="current-recording-duration">0</span> seconds</p>
+        <audio id="audio-player-controls" controls></audio>
+    </div>
+
+    <div class="submit-container">
+        <button id="submit-button" class="button">Submit your voice</button>
+    </div>
+
+
+    
+    
+</body>
+</html>
